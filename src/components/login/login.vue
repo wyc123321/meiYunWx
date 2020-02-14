@@ -161,10 +161,11 @@
     width: 28px;
     height: 28px;
   }
-  .code{
+
+  .code {
     position: absolute;
-    width:126px;
-    height:56px;
+    width: 126px;
+    height: 56px;
     right: 24px;
     cursor: pointer;
   }

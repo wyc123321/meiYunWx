@@ -35,12 +35,12 @@
     </group>
     <button class="submitBtn">确 定</button>
     <toast v-model="showPositionValue" type="text" width="12rem" :time="1500" is-show-mask :text="message"
-    position="top"></toast>
+           position="top"></toast>
   </div>
 </template>
 
 <script>
-  import {Loading, Toast,XInput, Group, XButton, Cell, Datetime, XAddress, ChinaAddressV4Data} from 'vux'
+  import {Loading, Toast, XInput, Group, XButton, Cell, Datetime, XAddress, ChinaAddressV4Data} from 'vux'
 
   export default {
     name: "my",
