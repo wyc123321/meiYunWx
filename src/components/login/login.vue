@@ -13,6 +13,7 @@
       <div class="loginItem" @click="foucs('code')">
         <i><img src="../../../static/img/yanzhen.png" alt=""></i>
         <input type="text" v-model="formData.code" ref="code" placeholder="验证码">
+        <img src="../../../static/img/code.png" alt="" class="code">
       </div>
     </div>
     <button class="loginBTn" @click="login">
@@ -143,20 +144,28 @@
     outline: none;
     border: none;
     width: 100%;
-    padding-left: 30px;
+    padding-left: 35px;
     box-sizing: border-box;
     font-family: Microsoft YaHei;
     font-weight: 400;
     color: rgba(95, 93, 112, 0.6);
+    line-height: 96px;
   }
 
   .loginItem i {
     position: absolute;
-    top: 36px;
+    top: 34px;
   }
 
   .loginItem i img {
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
+  }
+  .code{
+    position: absolute;
+    width:126px;
+    height:56px;
+    right: 24px;
+    cursor: pointer;
   }
 </style>
