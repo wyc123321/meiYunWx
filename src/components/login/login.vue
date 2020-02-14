@@ -95,7 +95,7 @@
     height: 100%;
     background: url("../../../static/img/loginBack.png") no-repeat;
     background-size: 100% 100%;
-    padding: 200px 60px 0;
+    padding: 160px 60px 0;
     box-sizing: border-box;
   }
 
