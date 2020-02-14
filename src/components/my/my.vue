@@ -34,13 +34,13 @@
       <x-input title="实际金额" name="username" placeholder="实际金额" label-width="85px"></x-input>
     </group>
     <button class="submitBtn">确 定</button>
-    <!--<toast v-model="showPositionValue" type="text" width="12rem" :time="1500" is-show-mask :text="message"-->
-    <!--position="top"></toast>-->
+    <toast v-model="showPositionValue" type="text" width="12rem" :time="1500" is-show-mask :text="message"
+    position="top"></toast>
   </div>
 </template>
 
 <script>
-  import {XInput, Group, XButton, Cell, Datetime, XAddress, ChinaAddressV4Data} from 'vux'
+  import {Loading, Toast,XInput, Group, XButton, Cell, Datetime, XAddress, ChinaAddressV4Data} from 'vux'
 
   export default {
     name: "my",
@@ -59,6 +59,8 @@
       }
     },
     components: {
+      Loading,
+      Toast,
       XInput,
       XButton,
       Group,
