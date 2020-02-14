@@ -11,14 +11,14 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/acc': {
-        target: "http://test.xxxxx.com/",changeOrigin: true,pathRewrite: {'^/acc': '/'}
+     '/base': {
+       target: "http://tmmy.guokaizhengxin.com/",changeOrigin: true,pathRewrite: {'^/base': '/'}
       },
-    },
+   },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
-    port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    port: 8081, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: true,
     errorOverlay: true,
     notifyOnErrors: true,
@@ -30,7 +30,8 @@ module.exports = {
      */
 
     // https://webpack.js.org/configuration/devtool/#development
-    devtool: 'cheap-module-eval-source-map',
+    //devtool: 'cheap-module-eval-source-map',
+     devtool: '#source-map',
 
     // If you have problems debugging vue-files in devtools,
     // set this to false - it *may* help

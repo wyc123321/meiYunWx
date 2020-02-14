@@ -10,10 +10,10 @@
         <i><img src="../../../static/img/password.png" alt=""></i>
         <input type="text" v-model="formData.password" ref="password" placeholder="密码">
       </div>
-      <div class="loginItem" @click="foucs('code')">
+      <div class="loginItem" @click="foucs('captchaCode')">
         <i><img src="../../../static/img/yanzhen.png" alt=""></i>
-        <input type="text" v-model="formData.code" ref="code" placeholder="验证码">
-        <img src="../../../static/img/code.png" alt="" class="code">
+        <input type="text" v-model="formData.captchaCode" ref="captchaCode" placeholder="验证码">
+        <img :src="imgSrc" alt="" class="code" @click="getCode">
       </div>
     </div>
     <button class="loginBTn" @click="login">
@@ -39,10 +39,12 @@
         message: '',
         showPositionValue: false,
         formData: {
-          email: "",
-          code: "",
-          password: ""
-        }
+          "captchaCode": "",
+          "captchaId": "",
+          "email": "",
+          "password": ""
+        },
+        imgSrc:require('../../../static/img/yanzhen.png')
       }
     },
     methods: {
@@ -52,7 +54,7 @@
       async login() {
         let email = this.formData.email.replace(/\s+/g, "");
         let password = this.formData.password.replace(/\s+/g, "");
-        let code = this.formData.code.replace(/\s+/g, "");
+        let captchaCode = this.formData.captchaCode.replace(/\s+/g, "");
         if (!email) {
           this.showPositionValue = true;
           this.message = '邮箱不能为空';
@@ -65,7 +67,7 @@
           this.showPositionValue = true;
           this.message = '密码不能为空';
           return;
-        } else if (!code) {
+        } else if (!captchaCode) {
           this.showPositionValue = true;
           this.message = '验证码不能为空';
           return;
@@ -73,18 +75,56 @@
         this.$vux.loading.show({
           text: '登录中...'
         });
-        this.$router.push('/my');
-        this.$vux.loading.hide();
+        //登录注册相关接口不能带token，所以单独处理
+        var instance = this.$axios.create({
+          headers: {'Content-Type': 'application/json'}
+        });
+        await instance.post(process.env.API_BASE + 'login', this.formData)
+          .then((response) => {
+            if (response.status=='200') {
+              window.localStorage.setItem('token', JSON.stringify(response.data))
+              this.$router.replace({path: '/navigate'});
+            } else {
+              this.$message.error(response.data);
+            }
+          })
+          .catch( async (error) => {
+            if (error.response) {
+              this.showPositionValue = true;
+              this.message = error.response.data;
+              await this.getCode()
+            } else if (error.request) {
+              console.log(error.request);
+            } else {
+              console.log('Error', error.message);
+            }
+            console.log(error.config);
+          });
+           this.$vux.loading.hide();
       },
       foucs(ref) {
         this.$refs[ref].focus();
+      },
+      async getCode() {
+        var instance = this.$axios.create({
+          headers: {'Content-Type': 'application/json'}
+        });
+        await instance.get(process.env.API_BASE + 'common/getCaptcha?date='+Date.now())
+          .then((response) => {
+            if (response.status=='200') {
+              this.imgSrc = response.data.base64Code;
+              this.formData.captchaId = response.data.key;
+            } else {
+              this.$message.error(response.data.msg);
+            }
+          })
+          .catch((error) => {
+            // console.log(error);
+          });
       }
     },
     async created() {
-      this.$vux.loading.show({
-        text: '加载中...'
-      });
-      this.$vux.loading.hide();
+      await this.getCode()
     }
   }
 </script>
@@ -164,8 +204,8 @@
 
   .code {
     position: absolute;
-    width: 126px;
-    height: 56px;
+    width: 146px;
+    height: 60px;
     right: 24px;
     cursor: pointer;
   }

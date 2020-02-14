@@ -1,6 +1,5 @@
 'use strict'
 module.exports = {
   NODE_ENV: '"production"',
-  EVN_CONFIG: '"prod"',
-  API_ACC:'"http://www.xxxx.com/"',
+  API_BASE:'"http://tmmy.guokaizhengxin.com/"',
 }
