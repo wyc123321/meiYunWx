@@ -5,5 +5,5 @@ const devEnv = require('./dev.env')
 module.exports = merge(devEnv, {
   NODE_ENV: '"testing"',
   EVN_CONFIG: '"test"',
-  API_ACC:'"http://test.yinuojizhang.com/"',
+  API_ACC:'"http://test.xxxxx.com/"',
 })
