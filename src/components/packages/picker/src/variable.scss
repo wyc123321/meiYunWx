@@ -1,0 +1,18 @@
+$green:#75D0CE;
+$text: #36383c;
+$orange:#FF8958;
+$border:#DBE1E5;
+$text-gray: #929c9b;
+@mixin weight{
+  font-family: PingFangTC-Medium;
+}
+@mixin def{
+  font-family: PingFangTC-Regular;
+}
+@mixin st($line) {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $line;
+  overflow: hidden;
+  width:100%;
+}

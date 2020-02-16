@@ -1,0 +1,10 @@
+$border:#ddd;
+$green:#4caf50;
+@mixin line-scale($line) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  display: -webkit-box;
+  -webkit-line-clamp: $line;
+  -webkit-box-orient: vertical;
+}
