@@ -5,10 +5,36 @@ import App from './App'
 import router from './router'
 import axios from 'axios';
 import FastClick from 'fastclick'
-import  { LoadingPlugin } from 'vux'
+import {LoadingPlugin} from 'vux'
 import 'lib-flexible/flexible'
+
 Vue.use(LoadingPlugin);
 Vue.config.productionTip = false;
+axios.interceptors.request.use(function (config) {
+  config.headers = {'TOKEN': JSON.parse(localStorage.getItem('token'))};
+  return config;
+}, function (error) {
+  return Promise.reject(error);
+});
+// Add a response interceptor
+axios.interceptors.response.use(function (response) {
+  return response;
+}, function (error) {
+  if (error.response) {
+    console.log(error)
+    switch (error.response.status) {
+      case 401:
+        // 返回 401 清除token信息并跳转到登录页面
+        localStorage.removeItem('token')
+        router.replace({
+          path: '/login',
+          query: {redirect: router.currentRoute.fullPath}
+        })
+    }
+  }
+  return Promise.reject(error);
+});
+;
 Vue.prototype.$axios = axios;
 /**
  *  点击延迟
@@ -18,6 +44,6 @@ FastClick.attach(document.body);
 new Vue({
   el: '#app',
   router,
-  components: { App },
+  components: {App},
   template: '<App/>'
 })

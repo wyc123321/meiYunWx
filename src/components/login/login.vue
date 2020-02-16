@@ -82,8 +82,9 @@
         await instance.post(process.env.API_BASE + 'login', this.formData)
           .then((response) => {
             if (response.status=='200') {
-              window.localStorage.setItem('token', JSON.stringify(response.data))
-              this.$router.replace({path: '/navigate'});
+              window.localStorage.setItem('token', JSON.stringify(response.data));
+              window.localStorage.setItem('user', JSON.stringify(this.formData));
+              this.$router.replace({path: '/my'});
             } else {
               this.$message.error(response.data);
             }
