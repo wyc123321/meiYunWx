@@ -42,33 +42,40 @@
       <!--<x-input title="实际金额"  placeholder="实际金额" label-width="85px"></x-input>-->
     </group>
     <button class="submitBtn" @click="onSubmit">确 定</button>
-    <toast v-model="showPositionValue" type="text" width="12rem" :time="1500" is-show-mask :text="message"
-           position="top"></toast>
+    <toast v-model="showPositionValue" type="text"  :time="1500" is-show-mask :text="message"></toast>
     <div id="container1">
 
     </div>
     <div id="container2">
 
     </div>
+    <div v-transfer-dom>
+      <alert v-model="showTip" title="恭喜" @on-show="onShow" @on-hide="onHide">提交成功</alert>
+    </div>
   </div>
 </template>
 
 <script>
   import AjaxPicker from 'ajax-picker'
-  import {Loading, Selector, Toast, XInput, Group, XButton, Cell, Datetime, XAddress, ChinaAddressV4Data} from 'vux'
+  import moment from 'moment'
+  import {
+    Loading,
+    Selector,
+    Toast,
+    XInput,
+    Group,
+    Cell,
+    Datetime,
+    Alert,
+    TransferDomDirective as TransferDom
+  } from 'vux'
 
   export default {
     name: "my",
     data() {
       return {
-        token: '',
-        list: [],
-        message: '',
-        showPositionValue: false,
-        count: 0,
-        show: false,
-        value: [],
-        showAddress: false,
+        message: '111',
+        showPositionValue: true,
         formData: {
           deliveryCode: '',  //提煤单号
           carNumber: '',  // 车牌号
@@ -86,47 +93,50 @@
         provinceList: [],
         ciytList: [],
         countyList: [],
-        values: '',
-        showPicker: true,
         startAddressName: "",
         startAddressArr: [],
         endAddressArr: [],
         endAddressName: '',
+        showTip: false
       }
     },
     components: {
       Loading,
       Toast,
       XInput,
-      XButton,
       Group,
       Cell,
       Datetime,
-      XAddress,
-      Selector
+      Selector,
+      Alert
+    },
+    directives: {
+      TransferDom
     },
     methods: {
-      onConfirm() {
-
+      onHide() {
+        console.log('on hide');
+        this.formData = {
+          deliveryCode: '',  //提煤单号
+          carNumber: '',  // 车牌号
+          startAddressId: '',  // 发货地
+          deliverDate: '',  // 发货日期
+          deliverTon: '',  // 发货吨数
+          endAddressId: '',  // 收货地
+          arrivalDate: '',  // 收货日期
+          arrivalTon: '',  // 收货吨数
+          lossFee: '',  // 亏吨扣费
+          oilFee: '',  // 运费
+          informationFee: '',  // 信息费
+          extraTonFee: '',  // 超吨费
+        };
       },
-      onCancel() {
-
-      },
-      onChange(picker, text, value, index, disabled) {
-
+      onShow() {
+        console.log('on show')
       },
       changeDate(value, key) {
         console.log('change', value, key);
         this.formData[key] = value;
-      },
-      onShadowChange(ids, names) {
-        console.log(ids, names)
-      },
-      logHide(str) {
-        console.log('on-hide', str)
-      },
-      logShow(str) {
-        console.log('on-show')
       },
       async queryRegion() {
         await this.$axios.get(process.env.API_BASE + 'common/queryRegion')
@@ -177,19 +187,27 @@
       },
       async onSubmit() {
         let formData = this.formData;
-        console.log(formData)
+        console.log(formData);
+        this.$vux.loading.show({
+          text: '提交中...'
+        });
         await this.$axios.post(process.env.API_BASE + 'wayBill/add', formData).then(response => {
           if (response.status == '200') {
-
+            this.showTip = true;
           } else {
             this.$message.error(response.data);
           }
         }).catch((error) => {
-
-        })
+          if (error.response) {
+            this.showPositionValue = true;
+            this.message = error.response.data;
+          }
+        });
+        this.$vux.loading.hide();
       }
     },
     async created() {
+      console.log(moment('2016-05-16').isBefore('2016-05-16'))
       await this.queryRegion()
     },
     mounted() {
