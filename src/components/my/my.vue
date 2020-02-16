@@ -42,7 +42,7 @@
       <!--<x-input title="实际金额"  placeholder="实际金额" label-width="85px"></x-input>-->
     </group>
     <button class="submitBtn" @click="onSubmit">确 定</button>
-    <toast v-model="showPositionValue" type="text"  :time="1500" is-show-mask :text="message"></toast>
+    <toast v-model="showPositionValue" type="text" width="8rem" :time="1500" is-show-mask :text="message"></toast>
     <div id="container1">
 
     </div>
@@ -85,10 +85,10 @@
           endAddressId: '',  // 收货地
           arrivalDate: '',  // 收货日期
           arrivalTon: '',  // 收货吨数
-          lossFee: '',  // 亏吨扣费
+          lossFee: '0',  // 亏吨扣费
           oilFee: '',  // 运费
           informationFee: '',  // 信息费
-          extraTonFee: '',  // 超吨费
+          extraTonFee: '0',  // 超吨费
         },
         provinceList: [],
         ciytList: [],
@@ -97,7 +97,21 @@
         startAddressArr: [],
         endAddressArr: [],
         endAddressName: '',
-        showTip: false
+        showTip: false,
+        formDataVerification: {
+          deliveryCode: '提煤单号',
+          carNumber: '车牌号',
+          startAddressId: '发货地',
+          deliverDate: '发货日期',
+          deliverTon: '发货吨数',
+          endAddressId: '收货地',
+          arrivalDate: '收货日期',
+          arrivalTon: '收货吨数',
+          lossFee: '亏吨扣费',  //
+          oilFee: '亏吨扣费',  // 运费
+          informationFee: '亏吨扣费',  // 信息费
+          extraTonFee: '亏吨扣费',  // 超吨费
+        }
       }
     },
     components: {
@@ -125,10 +139,10 @@
           endAddressId: '',  // 收货地
           arrivalDate: '',  // 收货日期
           arrivalTon: '',  // 收货吨数
-          lossFee: '',  // 亏吨扣费
+          lossFee: '0',  // 亏吨扣费
           oilFee: '',  // 运费
           informationFee: '',  // 信息费
-          extraTonFee: '',  // 超吨费
+          extraTonFee: '0',  // 超吨费
         };
       },
       onShow() {
@@ -188,6 +202,20 @@
       async onSubmit() {
         let formData = this.formData;
         console.log(formData);
+        for (var key in formData) {
+          if (!formData[key] && key != 'lossFee' && key != 'extraTonFee') {
+            this.showPositionValue = true;
+            this.message = this.formDataVerification[key] + '不能为空';
+            return
+          }
+        }
+        if (this.formData.arrivalDate != this.formData.deliverDate) {
+          if (moment(this.formData.arrivalDate).isBefore(this.formData.deliverDate)) {
+            this.showPositionValue = true;
+            this.message = "到货日期不能小于发货日期";
+            return
+          }
+        }
         this.$vux.loading.show({
           text: '提交中...'
         });
@@ -207,7 +235,6 @@
       }
     },
     async created() {
-      console.log(moment('2016-05-16').isBefore('2016-05-16'))
       await this.queryRegion()
     },
     mounted() {
