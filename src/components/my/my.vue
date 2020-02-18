@@ -44,7 +44,8 @@
       <!--<x-input title="油票"  placeholder="请输入油票" label-width="85px"></x-input>-->
       <x-input title="超吨费" type="number" v-model="formData.extraTonFee" placeholder="请输入超吨费"
                label-width="85px"></x-input>
-      <x-input title="运费" type="number" v-model="formData.oilFee" placeholder="请输入运费" label-width="85px"></x-input>
+      <x-input title="油费" type="number" v-model="formData.oilFee" placeholder="请输入油费" label-width="85px"></x-input>
+      <x-input title="运费单价" type="number" v-model="formData.freightUnit" placeholder="请输入运费单价" label-width="85px"></x-input>
       <!--<x-input title="实际金额"  placeholder="实际金额" label-width="85px"></x-input>-->
     </group>
     <button class="submitBtn" @click="onSubmit">确 定</button>
@@ -93,10 +94,11 @@
           endAddressId: '',  // 收货地
           arrivalDate: '',  // 收货日期
           arrivalTon: '',  // 收货吨数
-          lossFee: '0',  // 亏吨扣费
-          oilFee: '',  // 运费
+          lossFee: '',  // 亏吨扣费
+          oilFee: '',  // 油费
           informationFee: '',  // 信息费
-          extraTonFee: '0',  // 超吨费
+          extraTonFee: '',  // 超吨费
+          freightUnit: '',  // 运费单价
         },
         provinceList: [],
         ciytList: [],
@@ -116,9 +118,10 @@
           arrivalDate: '收货日期',
           arrivalTon: '收货吨数',
           lossFee: '亏吨扣费',  //
-          oilFee: '亏吨扣费',  // 运费
+          oilFee: '油费',  // 油费
           informationFee: '亏吨扣费',  // 信息费
           extraTonFee: '亏吨扣费',  // 超吨费
+          freightUnit: '运费单价',  // 运费单价
         },
         addressList: [],
         endAddressValue: [],
@@ -151,10 +154,11 @@
           endAddressId: '',  // 收货地
           arrivalDate: '',  // 收货日期
           arrivalTon: '',  // 收货吨数
-          lossFee: '0',  // 亏吨扣费
+          lossFee: '',  // 亏吨扣费
           oilFee: '',  // 运费
           informationFee: '',  // 信息费
-          extraTonFee: '0',  // 超吨费
+          extraTonFee: '',  // 超吨费
+          freightUnit: '',  // 运价
         };
       },
       onShow() {
@@ -225,7 +229,7 @@
         let formData = this.formData;
         console.log(formData);
         for (var key in formData) {
-          if (!formData[key] && key != 'lossFee' && key != 'extraTonFee') {
+          if (!formData[key]) {
             this.showPositionValue = true;
             this.message = this.formDataVerification[key] + '不能为空';
             return
