@@ -147,7 +147,9 @@
               console.log("登录页面进行登录 openId:" + openId)
             }
           } else {
-            console.log("sucess token:" + token)
+            console.log("sucess token:" + token);
+            window.localStorage.setItem('token', JSON.stringify(token));
+            this.$router.replace({path: '/my'});
           }
         }else {
           this.$router.replace({path: '/my'});
@@ -212,7 +214,7 @@
   }
 
   .loginItem input {
-    font-size: 20px;
+    font-size: 30px;
     height: 100%;
     outline: none;
     border: none;
@@ -241,5 +243,11 @@
     height: 65px;
     right: 24px;
     cursor: pointer;
+  }
+  input::-webkit-input-placeholder {
+    /* placeholder颜色  */
+    color: #aab2bd;
+    /* placeholder字体大小  */
+    font-size: 26px;
   }
 </style>

@@ -412,7 +412,7 @@
   }
 
   .title {
-    font-size: 30px;
+    font-size: 32px;
     font-family: Microsoft YaHei;
     font-weight: 400;
     color: rgba(42, 42, 42, 1);
@@ -493,7 +493,7 @@
   }
 
   .my .weui-input {
-    font-size: 28px;
+    font-size: 30px !important;
     font-family: Microsoft YaHei;
     font-weight: 400;
     color: #999 !important;
@@ -511,6 +511,9 @@
 
   .my .weui-cell {
     padding: 14PX 15PX !important;
+  }
+  .my input{
+    font-size: 30px !important;
   }
 </style>
 
