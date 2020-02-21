@@ -8,7 +8,7 @@
       </div>
       <div class="loginItem" @click="foucs('password')">
         <i><img src="../../../static/img/password.png" alt=""></i>
-        <input type="text" v-model="formData.password" ref="password" placeholder="密码">
+        <input type="password" v-model="formData.password" ref="password" placeholder="密码">
       </div>
       <div class="loginItem" @click="foucs('captchaCode')">
         <i><img src="../../../static/img/yanzhen.png" alt=""></i>
