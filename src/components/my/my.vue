@@ -267,9 +267,14 @@
         let formData = this.formData;
         console.log(formData);
         for (var key in formData) {
-          if (!formData[key]) {
+          if (!formData[key]&& key != 'paymentAmount' && key != 'freightFee') {
             this.showPositionValue = true;
             this.message = this.formDataVerification[key] + '不能为空';
+            return
+          }
+          if (!formData[key]&& (key == 'paymentAmount' || key == 'freightFee')) {
+            this.showPositionValue = true;
+            this.message = '请先计算运费';
             return
           }
         }
