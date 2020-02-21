@@ -136,34 +136,22 @@
             // console.log(error);
           });
       },
-      async getWXloginURL() {
-
-        window.location = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxf9db3d166e257b76&redirect_uri=http://tmmy.guokaizhengxin.com/oAuth&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
-        let url  = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxf9db3d166e257b76&redirect_uri=http://tmmy.guokaizhengxin.com/oAuth&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
-        // await this.$axios.get(url).then(response => {
-        //   if (response.status == '20') {
-        //     window.location.href = response.data;
-        //   }
-        // }).catch(error => {
-        // });
-        // this.$jsonp(url).then((res)=>{
-        //   console.log(res)
-        // })
-      },
       init() {
-        let TOKEN = JSON.parse(localStorage.getItem('token'));
-        let OPENID = JSON.parse(localStorage.getItem('token'));
-        if (!TOKEN) {
-          TOKEN = this.getCookie('TOKEN');
-          OPENID = this.getCookie('OPEN-ID');
-          console.log(TOKEN)
-          console.log(OPENID)
-        }
-        // this.getWXloginURL()
+         let token = this.getCookie('TOKEN');
+         let openId = this.getCookie('OPEN-ID');
+         if(!token){
+           if(!openId){
+             window.location.href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxf9db3d166e257b76&redirect_uri=http://tmmy.guokaizhengxin.com/oAuth&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
+           }else{
+             console.log("登录页面进行登录 openId:"+openId)
+           }
+         }else {
+           console.log("sucess token:"+token)
+         }
       }
     },
     async created() {
-      this.init()
+      this.init();
       await this.getCode()
     }
   }
