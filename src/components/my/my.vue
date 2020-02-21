@@ -36,7 +36,7 @@
     </group>
     <p class="title"> 计费信息</p>
     <group>
-      <!--<x-input title="亏吨"  placeholder="请输入亏吨" label-width="85px"></x-input>-->
+      <x-input title="亏吨"  v-model="formData.lossTon" placeholder="请输入亏吨" label-width="85px"></x-input>
       <x-input title="亏吨扣费" type="number" v-model="formData.lossFee" placeholder="请输入亏吨扣费" label-width="85px"></x-input>
       <!--<x-input title="运费单价"  placeholder="请输入运费单价" label-width="85px"></x-input>-->
       <x-input title="信息费" type="number" v-model="formData.informationFee" placeholder="请输入信息费"
@@ -46,7 +46,7 @@
                label-width="85px"></x-input>
       <x-input title="油费" type="number" v-model="formData.oilFee" placeholder="请输入油费" label-width="85px"></x-input>
       <x-input title="运费单价" type="number" v-model="formData.freightUnit" placeholder="请输入运费单价" label-width="85px"></x-input>
-      <!--<x-input title="实际金额"  placeholder="实际金额" label-width="85px"></x-input>-->
+      <x-input title="实际金额"  placeholder="实际金额" label-width="85px"></x-input>
     </group>
     <button class="submitBtn" @click="onSubmit">确 定</button>
     <toast v-model="showPositionValue" type="text" width="8rem" :time="1500" is-show-mask :text="message"></toast>
@@ -95,6 +95,7 @@
           arrivalDate: '',  // 收货日期
           arrivalTon: '',  // 收货吨数
           lossFee: '',  // 亏吨扣费
+          lossTon: '',  // 亏吨扣费
           oilFee: '',  // 油费
           informationFee: '',  // 信息费
           extraTonFee: '',  // 超吨费
@@ -118,6 +119,7 @@
           arrivalDate: '收货日期',
           arrivalTon: '收货吨数',
           lossFee: '亏吨扣费',  //
+          lossTon: '亏吨',  //
           oilFee: '油费',  // 油费
           informationFee: '亏吨扣费',  // 信息费
           extraTonFee: '亏吨扣费',  // 超吨费

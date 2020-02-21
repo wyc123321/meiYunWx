@@ -26,6 +26,7 @@
 
 <script>
   import {CheckIcon, Loading, Toast} from 'vux'
+  import qs from 'qs'
 
   export default {
     name: "login",
@@ -44,10 +45,22 @@
           "email": "",
           "password": ""
         },
-        imgSrc:require('../../../static/img/yanzhen.png')
+        imgSrc: require('../../../static/img/yanzhen.png')
       }
     },
     methods: {
+      getCookie(name) {
+        var strcookie = document.cookie;//获取cookie字符串
+        var arrcookie = strcookie.split("; ");//分割
+        //遍历匹配
+        for (var i = 0; i < arrcookie.length; i++) {
+          var arr = arrcookie[i].split("=");
+          if (arr[0] == name) {
+            return arr[1];
+          }
+        }
+        return "";
+      },
       change(val, label) {
         console.log('change', val, label)
       },
@@ -81,7 +94,7 @@
         });
         await instance.post(process.env.API_BASE + 'login', this.formData)
           .then((response) => {
-            if (response.status=='200') {
+            if (response.status == '200') {
               window.localStorage.setItem('token', JSON.stringify(response.data));
               window.localStorage.setItem('user', JSON.stringify(this.formData));
               this.$router.replace({path: '/my'});
@@ -89,7 +102,7 @@
               this.$message.error(response.data);
             }
           })
-          .catch( async (error) => {
+          .catch(async (error) => {
             if (error.response) {
               this.showPositionValue = true;
               this.message = error.response.data;
@@ -101,7 +114,7 @@
             }
             console.log(error.config);
           });
-           this.$vux.loading.hide();
+        this.$vux.loading.hide();
       },
       foucs(ref) {
         this.$refs[ref].focus();
@@ -110,9 +123,9 @@
         var instance = this.$axios.create({
           headers: {'Content-Type': 'application/json'}
         });
-        await instance.get(process.env.API_BASE + 'common/getCaptcha?date='+Date.now())
+        await instance.get(process.env.API_BASE + 'common/getCaptcha?date=' + Date.now())
           .then((response) => {
-            if (response.status=='200') {
+            if (response.status == '200') {
               this.imgSrc = response.data.base64Code;
               this.formData.captchaId = response.data.key;
             } else {
@@ -122,9 +135,35 @@
           .catch((error) => {
             // console.log(error);
           });
+      },
+      async getWXloginURL() {
+
+        window.location = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxf9db3d166e257b76&redirect_uri=http://tmmy.guokaizhengxin.com/oAuth&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
+        let url  = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxf9db3d166e257b76&redirect_uri=http://tmmy.guokaizhengxin.com/oAuth&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
+        // await this.$axios.get(url).then(response => {
+        //   if (response.status == '20') {
+        //     window.location.href = response.data;
+        //   }
+        // }).catch(error => {
+        // });
+        // this.$jsonp(url).then((res)=>{
+        //   console.log(res)
+        // })
+      },
+      init() {
+        let TOKEN = JSON.parse(localStorage.getItem('token'));
+        let OPENID = JSON.parse(localStorage.getItem('token'));
+        if (!TOKEN) {
+          TOKEN = this.getCookie('TOKEN');
+          OPENID = this.getCookie('OPEN-ID');
+          console.log(TOKEN)
+          console.log(OPENID)
+        }
+        // this.getWXloginURL()
       }
     },
     async created() {
+      this.init()
       await this.getCode()
     }
   }
@@ -167,7 +206,7 @@
   }
 
   .loginItem {
-    height: 96px;
+    height: 110px;
     background: rgba(255, 255, 255, 1);
     box-shadow: 0px 6px 14px 0px rgba(91, 115, 249, 0.17);
     border-radius: 10px;
@@ -195,7 +234,7 @@
 
   .loginItem i {
     position: absolute;
-    top: 34px;
+    top: 41px;
   }
 
   .loginItem i img {
@@ -205,8 +244,8 @@
 
   .code {
     position: absolute;
-    width: 146px;
-    height: 60px;
+    width: 186px;
+    height: 65px;
     right: 24px;
     cursor: pointer;
   }
