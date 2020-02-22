@@ -180,8 +180,8 @@
             this.message = this.formDataVerification[key] + '不能为空';
             return
           }
-          this.show = true;
         }
+        this.show = true;
       },
       async getAddressList() {
         await this.$axios.post(process.env.API_BASE + 'address/getALlList').then(response => {
