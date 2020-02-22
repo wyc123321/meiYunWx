@@ -105,6 +105,7 @@
             if (error.response) {
               this.showPositionValue = true;
               this.message = error.response.data;
+              this.formData.captchaCode='';
               await this.getCode()
             } else if (error.request) {
               console.log(error.request);
