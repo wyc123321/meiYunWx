@@ -11,7 +11,7 @@
     <div class="submitBtnList submitBtnList1">
       <button class="submitBtn2" @click="onSubmit">提交计费配置</button>
     </div>
-    <toast v-model="showPositionValue" type="text" width="8rem" :time="1500" is-show-mask :text="message"></toast>
+    <toast v-model="showPositionValue" position="top" type="text" width="8rem" :time="1500" is-show-mask :text="message"></toast>
 
     <div v-transfer-dom>
       <alert v-model="showTip" title="恭喜" @on-show="onShow" @on-hide="onHide">提交成功</alert>
