@@ -155,7 +155,6 @@
         }else {
           this.$router.replace({path: '/addWayBill'});
         }
-
       }
     },
     async created() {
