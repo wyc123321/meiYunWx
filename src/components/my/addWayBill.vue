@@ -447,9 +447,9 @@
         })
       },
       init() {
+        window.localStorage.setItem('preView', this.$route.path);
         let storageToken =   JSON.parse(localStorage.getItem('token'));
         if(!storageToken){
-          window.localStorage.setItem('preView', this.$route.path);
           this.$router.replace({path: '/login'});
         }
       }
