@@ -225,6 +225,8 @@
           freightFee: '',  // 运费
           paymentAmount: '',  // 实际金额
         };
+        this.endAddressValue=[];
+        this.startAddressValue=[];
       },
       onShow() {
         console.log('on show')

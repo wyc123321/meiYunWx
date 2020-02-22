@@ -164,6 +164,9 @@
           endAddressId: '',  // 收货地
           tonValue: '',  // 吨位取值
         };
+        this.endAddressValue=[];
+        this.startAddressValue=[];
+        this.tonValue=[];
       },
       onShow() {
         console.log('on show')
