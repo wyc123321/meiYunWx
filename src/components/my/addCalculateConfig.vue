@@ -218,7 +218,7 @@
 
 <style scoped>
   .my {
-    margin: 30px;
+    margin: 0 30px;
     box-sizing: border-box;
     padding-top: 160px;
   }
