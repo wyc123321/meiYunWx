@@ -1,8 +1,9 @@
 <template>
   <div class="my">
     <group>
+      <plateNumber @getPlateLicense="getPlateLicense"></plateNumber>
       <x-input title="提煤单号" v-model="formData.deliveryCode" placeholder="请输入提煤单号" label-width="85px"></x-input>
-      <x-input title="车牌号" v-model="formData.carNumber" placeholder="请输入车牌号" label-width="85px"></x-input>
+      <!--<x-input title="车牌号" v-model="formData.carNumber" placeholder="请输入车牌号" label-width="85px"></x-input>-->
     </group>
     <p class="title">发货信息</p>
     <group>
@@ -53,7 +54,7 @@
     </group>
     <div class="submitBtnList">
       <button class="submitBtn1" @click="onCompute">计算运费</button>
-      <button class="submitBtn" @click="onSubmit">确 定</button>
+      <button class="submitBtn" @click="onSubmit">提交运单</button>
     </div>
 
     <toast v-model="showPositionValue" type="text" width="8rem" :time="1500" is-show-mask :text="message"></toast>
@@ -73,6 +74,7 @@
 <script>
   // import AjaxPicker from 'ajax-picker'
   import moment from 'moment'
+  import plateNumber from './plateNumber'
   import {
     Loading,
     Selector,
@@ -150,12 +152,17 @@
       Datetime,
       Selector,
       Alert,
-      PopupPicker
+      PopupPicker,
+      plateNumber
     },
     directives: {
       TransferDom
     },
     methods: {
+      getPlateLicense(data){
+        console.log('组件传出的data',data)
+        this.formData.carNumber = data;
+      },
       onHide() {
         console.log('on hide');
         this.formData = {
@@ -303,7 +310,7 @@
         this.$vux.loading.hide();
       },
       async getAddressList() {
-        await this.$axios.post(process.env.API_BASE + '/address/getALlList').then(response => {
+        await this.$axios.post(process.env.API_BASE + 'address/getALlList').then(response => {
           if (response.status == '200') {
             let addressList = [];
             let arr = [];

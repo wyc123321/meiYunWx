@@ -1,30 +1,30 @@
 <template>
   <div id="page">
     <div class="wrap">
-      <div class="radio-box">
-        <label class="flex-items-center">
-          <img v-if="formData.commonCard == 1"
-            src="../assets/images/icon_chose_s@2x.png"
-            alt="">
-          <img v-else
-            src="../assets/images/icon_chose_n@2x.png"
-            alt="">
-          <input type="radio"
-            v-model="formData.commonCard"
-            value="1" />普通车牌
-        </label>
-        <label class="flex-items-center">
-          <img v-if="formData.commonCard == 2"
-            src="../assets/images/icon_chose_s@2x.png"
-            alt="">
-          <img v-else
-            src="../assets/images/icon_chose_n@2x.png"
-            alt="">
-          <input type="radio"
-            v-model="formData.commonCard"
-            value="2" />新能源车牌
-        </label>
-      </div>
+      <!--<div class="radio-box">-->
+        <!--<label class="flex-items-center">-->
+          <!--<img v-if="formData.commonCard == 1"-->
+            <!--src="../../../static/img/icon_chose_s@2x.png"-->
+            <!--alt="">-->
+          <!--<img v-else-->
+            <!--src="../../../static/img/icon_chose_n@2x.png"-->
+            <!--alt="">-->
+          <!--<input type="radio"-->
+            <!--v-model="formData.commonCard"-->
+            <!--value="1" />普通车牌-->
+        <!--</label>-->
+        <!--<label class="flex-items-center">-->
+          <!--<img v-if="formData.commonCard == 2"-->
+            <!--src="../../../static/img/icon_chose_s@2x.png"-->
+            <!--alt="">-->
+          <!--<img v-else-->
+            <!--src="../../../static/img/icon_chose_n@2x.png"-->
+            <!--alt="">-->
+          <!--<input type="radio"-->
+            <!--v-model="formData.commonCard"-->
+            <!--value="2" />新能源车牌-->
+        <!--</label>-->
+      <!--</div>-->
       <div class="card-header">车牌号码：</div>
       <div class="num-box">
         <div class="num0" @click="clickFirstWrap()">
@@ -40,9 +40,9 @@
         <div v-if="formData.commonCard == '2'" class="num1" @click="clickKeyWordWrap(7)"><span>{{formData.num7}}</span></div>
       </div>
 
-      <div class="submit-box">
-        <button @click="submitFn()">确认</button>
-      </div>
+      <!--<div class="submit-box">-->
+        <!--<button @click="submitFn()">确认</button>-->
+      <!--</div>-->
     </div>
     <div class="first-word-wrap"
       v-if="firstWrapStatus">
@@ -204,10 +204,10 @@
           :key="index"
           @click="clickKeyBoard(item)">{{item}}</span>
           <span class="bordernone"></span>
-          <span class="delete" @click="deleteWord"><img src="../assets/images/icon-delete.png" alt=""></span>
+          <span class="delete" @click="deleteWord"><img src="../../../static/img/icon-delete.png" alt=""></span>
       </div>
       <div class="cancel">
-        <span @click="keyBoardStatus = false">完成</span>
+        <span @click="done">完成</span>
       </div>
     </div>
   </div>
@@ -248,6 +248,27 @@ export default {
   mounted () {
   },
   methods: {
+    done(){
+      let plateLicense
+      if (this.formData.commonCard === '1') {
+        plateLicense = this.plate_license_1
+        plateLicense = this.palindrome(plateLicense)
+        if (plateLicense.length < 7) {
+          alert('请输入正确的车牌号')
+          return
+        }
+      }
+      if (this.formData.commonCard === '2') {
+        plateLicense = this.plate_license_2
+        plateLicense = this.palindrome(plateLicense)
+        if (plateLicense.length < 8) {
+          alert('请输入正确的车牌号')
+          return
+        }
+      }
+      this.$emit('getPlateLicense',plateLicense)
+      this.keyBoardStatus = false;
+    },
     clickFirstWrap () {
       // 点击第一个输入框
       this.firstClickStatus = true
@@ -276,12 +297,12 @@ export default {
       if (this.formData.commonCard === '1') {
         this.activeKeyWordIndex++
         if (this.activeKeyWordIndex > 6) {
-          this.keyBoardStatus = false
+          // this.keyBoardStatus = false
         }
       } else {
         this.activeKeyWordIndex++
         if (this.activeKeyWordIndex > 7) {
-          this.keyBoardStatus = false
+          // this.keyBoardStatus = false
         }
       }
     },
@@ -413,236 +434,237 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.flex-items-center {
-  display: flex;
-  align-items: center;
-}
-.wrap {
-  height: 11.1rem;
-  margin: 0.5rem 0.6rem;
-  padding: 0.85rem 0.6rem;
-  background-color: #fff;
-  border-radius: 0.5rem;
-  .radio-box {
+  .flex-items-center {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    font-size: 0.7rem;
-    text-align: right;
-    color: #4a4a4a;
-    input[type="radio"] {
-      display: none;
-    }
-    label {
-      padding-left: 0.6rem;
-      cursor: pointer;
-      img {
-        width: 0.8rem;
-        margin-right: 0.1rem;
+  }
+  .wrap {
+    margin: 0px 24px;
+    padding: 0px 24px 30px;
+    background-color: #fff;
+    border-radius: 20px;
+    .radio-box {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      font-size: 28px;
+      text-align: right;
+      color: #4a4a4a;
+      input[type="radio"] {
+        display: none;
+      }
+      label {
+        padding-left: 24px;
+        cursor: pointer;
+        img {
+          width: 32px;
+          margin-right: 4px;
+        }
       }
     }
-  }
-  .card-header {
-    font-size: 0.75rem;
-    margin: 0.2rem 0 0.5rem;
-    color: #4a4a4a;
-  }
-  // input输入框
-  .num-box {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    .spot {
-      width: 0.2rem;
-      height: 0.2rem;
-      border-radius: 50%;
-      background-color: #d8d8d8;
+    .card-header {
+      font-size: 30px;
+      margin: 8px 0 20px;
+      color: #4a4a4a;
     }
-    & > div {
-      width: 1.8rem;
-      height: 1.8rem;
-      border: 1px solid #e4e4e4;
-      &.first {
-        position: relative;
-        text-align: center;
-        line-height: 1.7rem;
-        font-weight: 200;
-        .input-wrap {
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          &.active {
-            z-index: 100;
+    // input输入框
+    .num-box {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .spot {
+        width: 8px;
+        height: 5px;
+        border-radius: 50%;
+        background-color: #d8d8d8;
+      }
+      & > div {
+        width: 72px;
+        height: 72px;
+        border: 1px solid #e4e4e4;
+        &.first {
+          position: relative;
+          text-align: center;
+          line-height: 1.7rem;
+          font-weight: 200;
+          .input-wrap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            &.active {
+              z-index: 100;
+            }
+          }
+          em {
+            color: #979797;
+            font-size: 64px;
+            line-height:68px;
+          }
+          span {
+            display: inline-block;
+            width: 100%;
+            height: 100%;
+            // background-color: #9cbce2;
+            color: #828282;
+            line-height: 72px;
           }
         }
-        em {
-          color: #979797;
-          font-size: 1.6rem;
-          line-height: 1.7rem;
+        &.active {
+          border: 1px solid #4a90e2;
+          &:after {
+            border-bottom: 20px solid #4a90e2;
+          }
         }
         span {
-          display: inline-block;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           width: 100%;
           height: 100%;
-          // background-color: #9cbce2;
+          font-size: 40px;
           color: #828282;
-          line-height: 1.8rem;
+          &.first {
+            background-color: #9cbce2;
+            color: #fff;
+            text-indent: 16px;
+            border-radius: 0;
+          }
         }
       }
-      &.active {
-        border: 1px solid #4a90e2;
-        &:after {
-          border-bottom: 0.5rem solid #4a90e2;
-        }
-      }
-      span {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    }
+    .submit-box {
+      button {
         width: 100%;
-        height: 100%;
-        font-size: 1rem;
-        color: #828282;
-        &.first {
-          background-color: #9cbce2;
-          color: #fff;
-          text-indent: 0.4rem;
-          border-radius: 0;
-        }
+        height: 88px;
+        border-radius: 10px;
+        font-size: 30px;
+        margin-top: 28px;
+        background: linear-gradient(
+          320deg,
+          rgba(74, 144, 226, 1) 0%,
+          rgba(101, 172, 248, 1) 100%
+        );
+        color: #fff;
       }
     }
-  }
-  .submit-box {
-    button {
-      width: 100%;
-      height: 2.2rem;
-      border-radius: 0.25rem;
-      font-size: 0.75rem;
-      margin-top: 0.7rem;
-      background: linear-gradient(
-        320deg,
-        rgba(74, 144, 226, 1) 0%,
-        rgba(101, 172, 248, 1) 100%
-      );
-      color: #fff;
-    }
-  }
-  .info {
-    font-size: 0.5rem;
-    margin-top: 0.9rem;
-    color: #828282;
-    text-align: left;
-    img {
-      width: 0.6rem;
-      vertical-align: middle;
-    }
-  }
-}
-.first-word-wrap {
-  // height: 9.4rem;
-  background-color: #D2D5DB;
-  padding: 0.6rem 0.8rem 1.1rem;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  .first-word {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.45rem;
-    .word {
-      box-sizing: border-box;
-      width: 1.8rem;
-      height: 1.8rem;
-      // border: 1px solid #9cbce2;
-      box-shadow: 0px 1px 4px  rgba(0, 0, 0, 0.35);
-      border-radius: 0.16rem;
-      text-align: center;
-      &.bordernone {
-        border: none;
-        box-shadow:none
-      }
-      span {
-        box-sizing: border-box;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        width: 100%;
-        height: 100%;
-        background-color: #fff;
-        color: #000;
-        // border: 1px solid #fff;
-        border-radius: 0.125rem;
-      }
+    .info {
+      font-size: 20px;
+      margin-top: 36px;
+      color: #828282;
+      text-align: left;
       img {
-        width: 1.6rem;
+        width: 24px;
+        vertical-align: middle;
       }
-    }
-    &:nth-last-of-type(1){
-      margin-bottom: 0rem;
     }
   }
-}
-.keyboard-wrap {
-  background-color: #D2D5DB;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 0.6rem 0.6rem 0.4rem;
-  .keyboard {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 2rem;
-    margin-bottom: 0.3rem;
-    span {
-      text-align: center;
+  .first-word-wrap {
+    // height: 9.4rem;
+    background-color: #D2D5DB;
+    padding: 24px 32px 44px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    .first-word {
       display: flex;
-      width: 1.8rem;
-      align-items: center;
-      justify-content: center;
-      height: 1.8rem;
-      margin: 0 0.3rem;
-      box-shadow: 0px 1px 4px  rgba(0, 0, 0, 0.35);
-      background-color: #fff;
-      border-radius: 0.125rem;
-      &:active {
-        background-color: #e4e4e4;
-      }
-      &.bordernone{
-        border: none;
-        box-shadow: none;
-        background-color: #D2D5DB;
-        &:active{
-          background-color:#D2D5DB;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      .word {
+        box-sizing: border-box;
+        width: 72px;
+        height: 72px;
+        // border: 1px solid #9cbce2;
+        box-shadow: 0px 1px 4px  rgba(0, 0, 0, 0.35);
+        border-radius: 0.16rem;
+        text-align: center;
+        &.bordernone {
+          border: none;
+          box-shadow:none
+        }
+        span {
+          box-sizing: border-box;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          width: 100%;
+          height: 100%;
+          background-color: #fff;
+          color: #000;
+          // border: 1px solid #fff;
+          border-radius: 0.125rem;
+        }
+        img {
+          width: 64px;
         }
       }
-      &.delete{
+      &:nth-last-of-type(1){
+        margin-bottom: 0rem;
+      }
+    }
+  }
+  .keyboard-wrap {
+    background-color: #D2D5DB;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 24px 24px 16px;
+    z-index: 100;
+    .keyboard {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 80px;
+      margin-bottom: 12px;
+      span {
+        text-align: center;
+        display: flex;
+        width: 72px;
+        align-items: center;
+        justify-content: center;
+        height: 72px;
+        margin: 0 12px;
+        box-shadow: 0px 1px 4px  rgba(0, 0, 0, 0.35);
+        background-color: #fff;
+        border-radius: 0.125rem;
+        &:active {
+          background-color: #e4e4e4;
+        }
+        &.bordernone{
+          border: none;
+          box-shadow: none;
+          background-color: #D2D5DB;
+          &:active{
+            background-color:#D2D5DB;
+          }
+        }
+        &.delete{
+          background-color: #465266;
+          img{
+            width: 46px;
+          }
+        }
+      }
+    }
+    .cancel{
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      span{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 144px;
+        height: 72px;
         background-color: #465266;
-        img{
-          width: 1.15rem;
-        }
+        color: #fff;
+        border-radius: 5px;
       }
     }
   }
-  .cancel{
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    span{
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 3.6rem;
-      height: 1.8rem;
-      background-color: #465266;
-      color: #fff;
-      border-radius: 0.125rem;
-    }
-  }
-}
 </style>
