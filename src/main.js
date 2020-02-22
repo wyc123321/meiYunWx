@@ -7,7 +7,19 @@ import axios from 'axios';
 import FastClick from 'fastclick'
 import {LoadingPlugin} from 'vux'
 import 'lib-flexible/flexible'
-
+//取cookies
+function getCookie(name){
+  let arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
+  if (arr != null) return unescape(arr[2]);
+  return null;
+}
+//删除cookie
+function delCookie(name){
+  var exp = new Date();
+  exp.setTime(exp.getTime() - 1);
+  var cval = getCookie(name);
+  if (cval != null) document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString();
+}
 Vue.use(LoadingPlugin);
 Vue.config.productionTip = false;
 axios.interceptors.request.use(function (config) {
@@ -24,10 +36,11 @@ axios.interceptors.response.use(function (response) {
     console.log(error)
     switch (error.response.status) {
       case 401:
+        delCookie('"TOKEN"')
         // 返回 401 清除token信息并跳转到登录页面
         localStorage.removeItem('token')
         router.replace({
-          path: '/login',
+          path: '/',
           query: {redirect: router.currentRoute.fullPath}
         })
     }
