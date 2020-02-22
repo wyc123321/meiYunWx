@@ -96,7 +96,7 @@
           .then((response) => {
             if (response.status == '200') {
               window.localStorage.setItem('token', JSON.stringify(response.data));
-              this.$router.replace({path: '/addWayBill'});
+              this.$router.replace({path: localStorage.getItem('preView')});
             } else {
               this.$message.error(response.data);
             }
@@ -137,23 +137,18 @@
           });
       },
       init() {
-        let storageToken =   JSON.parse(localStorage.getItem('token'));
-        if(!storageToken){
-          let token = this.getCookie('TOKEN');
-          let openId = this.getCookie('OPEN-ID');
-          if (!token) {
-            if (!openId) {
-              window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxf9db3d166e257b76&redirect_uri=http://tmmy.guokaizhengxin.com/oAuth&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
-            } else {
-              console.log("登录页面进行登录 openId:" + openId)
-            }
+        let token = this.getCookie('TOKEN');
+        let openId = this.getCookie('OPEN-ID');
+        if (!token) {
+          if (!openId) {
+            window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxf9db3d166e257b76&redirect_uri=http://tmmy.guokaizhengxin.com/oAuth&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
           } else {
-            console.log("sucess token:" + token);
-            window.localStorage.setItem('token', JSON.stringify(token));
-            this.$router.replace({path: '/addWayBill'});
+            console.log("登录页面进行登录 openId:" + openId)
           }
-        }else {
-          this.$router.replace({path: '/addWayBill'});
+        } else {
+          console.log("sucess token:" + token);
+          window.localStorage.setItem('token', JSON.stringify(token));
+          this.$router.replace({path: localStorage.getItem('preView')});
         }
       }
     },

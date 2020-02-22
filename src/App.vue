@@ -17,9 +17,11 @@
   html,body{
     height: 100%;
     background: rgb(248,247,252);
+    touch-action: none;
   }
   #app {
     width: 100%;
     height: 100%;
   }
+
 </style>
