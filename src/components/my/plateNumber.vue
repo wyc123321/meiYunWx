@@ -440,7 +440,7 @@ export default {
   }
   .wrap {
     margin: 0px 24px;
-    padding: 0px 24px 30px;
+    padding: 20px 24px 30px;
     background-color: #fff;
     border-radius: 20px;
     .radio-box {
