@@ -25,7 +25,7 @@
             <!--value="2" />新能源车牌-->
         <!--</label>-->
       <!--</div>-->
-      <div class="card-header">车牌号码：</div>
+      <div class="card-header">车牌号码</div>
       <div class="num-box">
         <div class="num0" @click="clickFirstWrap()">
             <span>{{formData.num0}}</span>
@@ -466,7 +466,7 @@ export default {
       color: #797979 !important;
       font-size: 28px !important;
       font-weight: bold !important;
-      margin: 8px 0 20px;
+      margin: 8px 0 20px -18px;
     }
     // input输入框
     .num-box {
