@@ -1,10 +1,10 @@
 <template>
   <div class="my">
     <group>
-      <popup-picker title="收货地" placeholder="请选择收货地" :data="addressList" v-model="endAddressValue"
-                    @on-change="changeAddress($event,'endAddressId')"></popup-picker>
       <popup-picker title="起始地" placeholder="请选择起始地" :data="addressList" v-model="startAddressValue"
                     @on-change="changeAddress($event,'startAddressId')"></popup-picker>
+      <popup-picker title="目的地" placeholder="请选择目的地" :data="addressList" v-model="endAddressValue"
+                    @on-change="changeAddress($event,'endAddressId')"></popup-picker>
       <popup-picker title="吨位取值" placeholder="请选择吨位取值" :data="tonList" v-model="tonValue"
                     @on-change="changeTon($event,'tonValue')"></popup-picker>
     </group>
@@ -65,8 +65,8 @@
         endAddressName: '',
         showTip: false,
         formDataVerification: {
-          startAddressId: '发货地',
-          endAddressId: '收货地',
+          startAddressId: '起始地',
+          endAddressId: '目的地',
           tonValue: '吨位取值',  // 吨位取值
         },
         addressList: [],
