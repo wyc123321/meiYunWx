@@ -51,6 +51,7 @@
       <x-input title="运费单价" v-model="formData.freightUnit" placeholder="请输入运费单价" label-width="85px"></x-input>
       <x-input title="运费" disabled v-model="formData.freightFee" label-width="85px"></x-input>
       <x-input title="实际金额" disabled v-model="formData.paymentAmount" label-width="85px"></x-input>
+      <x-input title="填报人" disabled v-model="realName" label-width="85px"></x-input>
     </group>
     <div class="submitBtnList">
       <button class="submitBtn1" @click="onCompute">计算运费</button>
@@ -67,6 +68,16 @@
     <!--</div>-->
     <div v-transfer-dom>
       <alert v-model="showTip" title="恭喜" @on-show="onShow" @on-hide="onHide">提交成功</alert>
+    </div>
+    <div v-transfer-dom>
+      <confirm v-model="show"
+               title="提交运单"
+               @on-cancel="onCancel"
+               @on-confirm="onConfirm"
+               @on-show="onShow"
+               @on-hide="onHide1">
+        <p style="text-align:center;">{{ '确定提交运单吗?' }}</p>
+      </confirm>
     </div>
   </div>
 </template>
@@ -85,11 +96,12 @@
     Datetime,
     Alert,
     TransferDomDirective as TransferDom,
-    PopupPicker
+    PopupPicker,
+    Confirm
   } from 'vux'
 
   export default {
-    name: "my",
+    name: "addWayBill",
     data() {
       return {
         message: '',
@@ -141,6 +153,8 @@
         addressList: [],
         endAddressValue: [],
         startAddressValue: [],
+        realName: '',
+        show: false
       }
     },
     components: {
@@ -153,14 +167,42 @@
       Selector,
       Alert,
       PopupPicker,
-      plateNumber
+      plateNumber,
+      Confirm
     },
     directives: {
       TransferDom
     },
     methods: {
-      getPlateLicense(data){
-        console.log('组件传出的data',data)
+      onHide1() {
+        console.log('on hide')
+      },
+      onShow() {
+        console.log('on show')
+      },
+      onCancel() {
+        this.show = false;
+      },
+      async onConfirm() {
+        this.$vux.loading.show({
+          text: '提交中...'
+        });
+        await this.$axios.post(process.env.API_BASE + 'wayBill/add', this.formData).then(response => {
+          if (response.status == '200') {
+            this.showTip = true;
+          } else {
+            this.$message.error(response.data);
+          }
+        }).catch((error) => {
+          if (error.response) {
+            this.showPositionValue = true;
+            this.message = error.response.data;
+          }
+        });
+        this.$vux.loading.hide();
+      },
+      getPlateLicense(data) {
+        console.log('组件传出的data', data)
         this.formData.carNumber = data;
       },
       onHide() {
@@ -270,16 +312,32 @@
             }
           });
       },
+      async getRealName() {
+        await this.$axios.post(process.env.API_BASE + 'user/detail')
+          .then((response) => {
+            if (response.status == '200') {
+              this.realName = response.data.realName
+            } else {
+              this.$message.error(response.data.msg);
+            }
+          })
+          .catch((error) => {
+            if (error.response) {
+              this.showPositionValue = true;
+              this.message = error.response.data;
+            }
+          });
+      },
       async onSubmit() {
         let formData = this.formData;
         console.log(formData);
         for (var key in formData) {
-          if (!formData[key]&& key != 'paymentAmount' && key != 'freightFee') {
+          if (!formData[key] && key != 'paymentAmount' && key != 'freightFee') {
             this.showPositionValue = true;
             this.message = this.formDataVerification[key] + '不能为空';
             return
           }
-          if (!formData[key]&& (key == 'paymentAmount' || key == 'freightFee')) {
+          if (!formData[key] && (key == 'paymentAmount' || key == 'freightFee')) {
             this.showPositionValue = true;
             this.message = '请先计算运费';
             return
@@ -292,22 +350,7 @@
             return
           }
         }
-        this.$vux.loading.show({
-          text: '提交中...'
-        });
-        await this.$axios.post(process.env.API_BASE + 'wayBill/add', formData).then(response => {
-          if (response.status == '200') {
-            this.showTip = true;
-          } else {
-            this.$message.error(response.data);
-          }
-        }).catch((error) => {
-          if (error.response) {
-            this.showPositionValue = true;
-            this.message = error.response.data;
-          }
-        });
-        this.$vux.loading.hide();
+        this.show = true;
       },
       async getAddressList() {
         await this.$axios.post(process.env.API_BASE + 'address/getALlList').then(response => {
@@ -403,8 +446,12 @@
       }
     },
     async created() {
-      // await this.queryRegion();
+      this.$vux.loading.show({
+        text: '加载中...'
+      });
       await this.getAddressList();
+      await this.getRealName();
+      this.$vux.loading.hide();
     },
     mounted() {
 
@@ -458,6 +505,7 @@
     width: 40%;
     margin-top: 40px;
   }
+
   .submitBtn1 {
     height: 96px;
     border-radius: 4px;
@@ -475,7 +523,8 @@
     color: #000000;
     background-color: white;
   }
-  .submitBtnList{
+
+  .submitBtnList {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -519,7 +568,8 @@
   .my .weui-cell {
     padding: 14PX 15PX !important;
   }
-  .my input{
+
+  .my input {
     font-size: 30px !important;
   }
 </style>

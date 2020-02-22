@@ -96,7 +96,7 @@
           .then((response) => {
             if (response.status == '200') {
               window.localStorage.setItem('token', JSON.stringify(response.data));
-              this.$router.replace({path: '/my'});
+              this.$router.replace({path: '/addWayBill'});
             } else {
               this.$message.error(response.data);
             }
@@ -150,10 +150,10 @@
           } else {
             console.log("sucess token:" + token);
             window.localStorage.setItem('token', JSON.stringify(token));
-            this.$router.replace({path: '/my'});
+            this.$router.replace({path: '/addWayBill'});
           }
         }else {
-          this.$router.replace({path: '/my'});
+          this.$router.replace({path: '/addWayBill'});
         }
 
       }
