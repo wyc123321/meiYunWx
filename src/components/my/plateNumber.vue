@@ -463,9 +463,10 @@ export default {
       }
     }
     .card-header {
-      font-size: 30px;
+      color: #797979 !important;
+      font-size: 28px !important;
+      font-weight: bold !important;
       margin: 8px 0 20px;
-      color: #4a4a4a;
     }
     // input输入框
     .num-box {
