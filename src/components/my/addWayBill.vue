@@ -52,6 +52,7 @@
       <x-input title="运费" disabled v-model="formData.freightFee" label-width="85px"></x-input>
       <x-input title="实际金额" disabled v-model="formData.paymentAmount" label-width="85px"></x-input>
       <x-input title="填报人" disabled v-model="realName" label-width="85px"></x-input>
+      <x-input title="账户余额" disabled v-model="balance" label-width="85px"></x-input>
     </group>
     <div class="submitBtnList">
       <button class="submitBtn1" @click="onCompute">计算运费</button>
@@ -154,6 +155,7 @@
         endAddressValue: [],
         startAddressValue: [],
         realName: '',
+        balance: '',
         show: false
       }
     },
@@ -318,7 +320,8 @@
         await this.$axios.post(process.env.API_BASE + 'user/detail')
           .then((response) => {
             if (response.status == '200') {
-              this.realName = response.data.realName
+              this.realName = response.data.realName;
+              this.balance = response.data.balance;
             } else {
               this.$message.error(response.data.msg);
             }
