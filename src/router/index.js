@@ -3,6 +3,8 @@ import Router from 'vue-router';
 import Login from '../components/login/login';
 import addWayBill from '../components/my/addWayBill.vue';
 import addCalculateConfig from '../components/my/addCalculateConfig.vue';
+import personalList from '../components/my/personalList.vue';
+import addWayDetaill from '../components/my/addWayDetaill.vue';
 /**
  *  配置滚动条的位置
  *  通过这个这个属性（是个函数），可以让应用像浏览器的原生表现那样，在按下 后退/前进 按钮时，简单地让页面滚动到顶部或原来的位置。
@@ -36,6 +38,18 @@ const router = new Router({
       name: 'addCalculateConfig',
       component: addCalculateConfig,
       meta: {title: '计费配置'}
+    },
+    {
+      path: '/personalList',
+      name: 'personalList',
+      component: personalList,
+      meta: {title: '运单列表'}
+    },
+    {
+      path: '/addWayDetaill',
+      name: 'addWayDetaill',
+      component: addWayDetaill,
+      meta: {title: '运单列表'}
     },
     {
       path: '*',

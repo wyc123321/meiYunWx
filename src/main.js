@@ -24,9 +24,10 @@ axios.interceptors.response.use(function (response) {
     console.log(error)
     switch (error.response.status) {
       case 401:
-        //delCookie( 'TOKEN' );//删除
+        delCookie( 'TOKEN' );//删除
         // 返回 401 清除token信息并跳转到登录页面
         localStorage.removeItem('token');
+        localStorage.removeItem('createTime');
         // router.replace({
         //   path: '/',
         //   query: {redirect: router.currentRoute.fullPath}

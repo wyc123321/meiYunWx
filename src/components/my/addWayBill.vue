@@ -1,7 +1,7 @@
 <template>
   <div class="my">
     <group>
-      <plateNumber @getPlateLicense="getPlateLicense"></plateNumber>
+      <plateNumber @getPlateLicense="getPlateLicense" ref="plateNumber"></plateNumber>
       <x-input title="提煤单号" v-model="formData.deliveryCode" placeholder="请输入提煤单号" label-width="85px"></x-input>
       <!--<x-input title="车牌号" v-model="formData.carNumber" placeholder="请输入车牌号" label-width="85px"></x-input>-->
     </group>
@@ -52,7 +52,7 @@
       <x-input title="运费" disabled v-model="formData.freightFee" label-width="85px"></x-input>
       <x-input title="实际金额" disabled v-model="formData.paymentAmount" label-width="85px"></x-input>
       <x-input title="填报人" disabled v-model="realName" label-width="85px"></x-input>
-      <x-input title="账户余额" disabled v-model="balance" label-width="85px"></x-input>
+      <x-input title="账户余额" disabled v-model="balance" class="balance"  label-width="85px"></x-input>
     </group>
     <div class="submitBtnList">
       <button class="submitBtn1" @click="onCompute">计算运费</button>
@@ -207,7 +207,7 @@
         console.log('组件传出的data', data)
         this.formData.carNumber = data;
       },
-      onHide() {
+     async onHide() {
         console.log('on hide');
         this.formData = {
           deliveryCode: '',  //提煤单号
@@ -229,6 +229,22 @@
         };
         this.endAddressValue=[];
         this.startAddressValue=[];
+        this.$refs.plateNumber.formData={
+          commonCard: '1',
+            num0: '',
+            num1: '',
+            num2: '',
+            num3: '',
+            num4: '',
+            num5: '',
+            num6: '',
+            num7: ''
+        };
+       this.$vux.loading.show({
+         text: '更新中...'
+       });
+        await this.getRealName();
+       this.$vux.loading.hide();
       },
       onShow() {
         console.log('on show')
@@ -584,6 +600,11 @@
 
   .my input {
     font-size: 30px !important;
+  }
+  .my .balance input.weui-input {
+   color: red !important;
+    -webkit-text-fill-color: red !important;
+    font-weight: bold !important;
   }
 </style>
 
