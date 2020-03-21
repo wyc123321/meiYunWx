@@ -39,13 +39,38 @@
       <x-input title="运费" disabled v-model="formData.freightFee" disabled label-width="85px"></x-input>
       <x-input title="实际金额" disabled v-model="formData.paymentAmount" disabled label-width="85px"></x-input>
       <x-input title="填报人" disabled v-model="formData.user.realName" label-width="85px" disabled></x-input>
-      <x-input title="账户余额" disabled v-model="formData.user.balance" class="balance" disabled
+      <x-input title="填表时间" disabled v-model="formData.createTime" class="balance" disabled
                label-width="85px"></x-input>
     </group>
     <div class="submitBtnList">
-      <button class="submitBtn" @click="onSubmit">返回</button>
+      <button class="submitBtn1" @click="onSubmit">返回</button>
+      <button class="submitBtn" @click="xDialogShow = true">打印</button>
     </div>
     <toast v-model="showPositionValue" type="text" width="8rem" :time="1500" is-show-mask :text="message"></toast>
+    <div v-transfer-dom>
+      <x-dialog v-model="xDialogShow" class="dialog-print">
+       <p>选择打印机</p>
+        <checker
+          v-model="printerId"
+          default-item-class="demo5-item"
+          selected-item-class="demo5-item-selected"
+        >
+          <checker-item v-for="(item,index) in printList" :key="index" :disabled="item.status!=2" :value="item.id">
+              <span> {{item.machineName}}</span>
+              <span v-if="item.status==0">离线</span>
+              <span v-if="item.status==1">缺纸</span>
+              <span v-if="item.status==2">正常</span>
+          </checker-item>
+        </checker>
+        <div class="btnList">
+          <button class="submitBtn" @click="xDialogShow=false">取消</button>
+          <button class="submitBtn" @click="print">确定</button>
+        </div>
+      </x-dialog>
+    </div>
+    <div v-transfer-dom>
+      <alert v-model="printerFlag" title="恭喜">打印成功</alert>
+    </div>
   </div>
 </template>
 
@@ -62,7 +87,9 @@
     Alert,
     TransferDomDirective as TransferDom,
     PopupPicker,
-    Confirm
+    Confirm,
+    XDialog,
+    Checker, CheckerItem,
   } from 'vux'
 
   export default {
@@ -99,6 +126,10 @@
             name: '',
           },
         },
+        xDialogShow:false,
+        printList:[],
+        printerId: "",
+        printerFlag:false
       }
     },
     components: {
@@ -111,7 +142,9 @@
       Selector,
       Alert,
       PopupPicker,
-      Confirm
+      Confirm,
+      XDialog,
+      Checker, CheckerItem
     },
     directives: {
       TransferDom
@@ -133,7 +166,8 @@
           id
         }).then(response => {
           if (response.status == '200') {
-            this.formData = response.data
+            this.formData = response.data;
+            this.formData.createTime =moment(this.formData.createTime).format('YYYY-MM-DD HH:mm:ss') ;
           }
         }).catch((error) => {
           if (error.response) {
@@ -141,6 +175,45 @@
             this.message = error.response.data;
           }
         })
+      },
+      async getALlList() {
+        await this.$axios.post(process.env.API_BASE + 'printer/getALlList').then(response => {
+          if (response.status == '200') {
+            this.printList = response.data;
+          }
+        }).catch((error) => {
+          if (error.response) {
+            this.showPositionValue = true;
+            this.message = error.response.data;
+          }
+        })
+      },
+      async print() {
+        if(!this.printerId){
+          this.showPositionValue = true;
+          this.message = '请选择打印机';
+          return
+        }
+        let data={
+          id:this.formData.id,
+          printerId:this.printerId
+        };
+        this.$vux.loading.show({
+          text: '请稍后...'
+        });
+        await this.$axios.post(process.env.API_BASE + 'wayBill/print',data).then(response => {
+          if (response.status == '200') {
+              this.printerFlag = true;
+              this.xDialogShow = false;
+              this.printerId = '';
+          }
+        }).catch((error) => {
+          if (error.response) {
+            this.showPositionValue = true;
+            this.message = error.response.data;
+          }
+        })
+        this.$vux.loading.hide();
       },
       init() {
         window.localStorage.setItem('preView', this.$route.path);
@@ -156,6 +229,7 @@
       });
       this.init();
       await this.getDetail(this.$route.query.id);
+      await this.getALlList();
       this.$vux.loading.hide();
     },
   }
@@ -203,8 +277,26 @@
     font-weight: 400;
     color: rgba(255, 255, 255, 1);
     display: block;
-    width: 100%;
+    width: 40%;
     margin-top: 40px;
+  }
+
+  .submitBtn1 {
+    height: 96px;
+    border-radius: 4px;
+    outline: none;
+    border: none;
+    text-align: center;
+    line-height: 96px;
+    cursor: pointer;
+    font-size: 30px;
+    font-family: Microsoft YaHei;
+    font-weight: 400;
+    display: block;
+    width: 40%;
+    margin-top: 40px;
+    color: #000000;
+    background-color: white;
   }
 
 
@@ -261,6 +353,42 @@
     color: red !important;
     -webkit-text-fill-color: red !important;
     font-weight: bold !important;
+  }
+ .dialog-print .demo5-item {
+    width: 80%;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    margin: 20px auto;
+    display: flex !important;
+    justify-content: space-between;
+    padding: 0 15px !important;
+  }
+ .dialog-print .demo5-item-selected {
+    background: #ffffff url('../../../static/img/checker.png') no-repeat right bottom;
+    border-color: #ff4a00;
+  }
+  .dialog-print .weui-dialog>p{
+    margin-top: 30px;
+  }
+  .dialog-print .weui-dialog .btnList{
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    margin: 25px auto;
+    box-sizing: border-box;
+  }
+  .dialog-print .weui-dialog button{
+    width: 40% !important;
+    height: 60px !important;
+    line-height: 60px !important;
+    font-size: 22px!important;
+  }
+  .dialog-print .weui-dialog button:first-child{
+    color: #000000 !important;
+    background-color: rgb(248,247,252) !important;
   }
 </style>
 

@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
      '/base': {
-       target: "http://tmmy.guokaizhengxin.com/",changeOrigin: true,pathRewrite: {'^/base': '/'}
+       target: "http://www.nmtmmy.com/",changeOrigin: true,pathRewrite: {'^/base': '/'}
       },
    },
 
