@@ -221,6 +221,7 @@
           if (response.status == '200') {
             this.addWayBillId = response.data;
             flag = true;
+            this.resetForm();
           } else {
             this.$message.error(response.data);
           }
@@ -239,8 +240,7 @@
         console.log('组件传出的data', data)
         this.formData.carNumber = data;
       },
-     async onHide() {
-        console.log('on hide');
+      resetForm(){
         this.formData = {
           deliveryCode: '',  //提煤单号
           carNumber: '',  // 车牌号
@@ -263,15 +263,18 @@
         this.startAddressValue=[];
         this.$refs.plateNumber.formData={
           commonCard: '1',
-            num0: '',
-            num1: '',
-            num2: '',
-            num3: '',
-            num4: '',
-            num5: '',
-            num6: '',
-            num7: ''
+          num0: '',
+          num1: '',
+          num2: '',
+          num3: '',
+          num4: '',
+          num5: '',
+          num6: '',
+          num7: ''
         };
+      },
+     async onHide() {
+        console.log('on hide');
        this.$vux.loading.show({
          text: '更新中...'
        });
@@ -683,33 +686,33 @@
     height: 60px;
     line-height: 60px;
     border-radius: 3px;
-    border: 1px solid #ccc;
+    border: 2PX solid #ccc;
     background-color: #fff;
-    margin: 20px auto;
+    margin: 20PX auto;
     display: flex !important;
     justify-content: space-between;
-    padding: 0 15px !important;
+    padding: 0 15PX !important;
   }
   .dialog-print .demo5-item-selected {
     background: #ffffff url('../../../static/img/checker.png') no-repeat right bottom;
     /*border-color: #ff4a00 !important;*/
-    border: 1px solid #ff4a00 !important;
+    border: 2PX solid #ff4a00 !important;
   }
   .dialog-print .weui-dialog>p{
-    margin-top: 30px;
+    margin-top: 30PX;
   }
   .dialog-print .weui-dialog .btnList{
     display: flex;
     justify-content: space-between;
     width: 80%;
-    margin: 25px auto;
+    margin: 25PX auto;
     box-sizing: border-box;
   }
   .dialog-print .weui-dialog button{
     width: 40% !important;
-    height: 60px !important;
-    line-height: 60px !important;
-    font-size: 22px!important;
+    height: 60PX !important;
+    line-height: 60PX !important;
+    font-size: 22PX!important;
   }
   .dialog-print .weui-dialog button:first-child{
     color: #000000 !important;
