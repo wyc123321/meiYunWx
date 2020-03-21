@@ -216,10 +216,11 @@
         this.$vux.loading.show({
           text: '提交中...'
         });
+        let flag = false;
         await this.$axios.post(process.env.API_BASE + 'wayBill/add', this.formData).then(response => {
           if (response.status == '200') {
-            // this.showTip = true;
             this.addWayBillId = response.data;
+            flag = true;
           } else {
             this.$message.error(response.data);
           }
@@ -229,7 +230,9 @@
             this.message = error.response.data;
           }
         });
-        await this.getALlList();
+        if(flag){
+          await this.getALlList();
+        }
         this.$vux.loading.hide();
       },
       getPlateLicense(data) {
