@@ -141,7 +141,7 @@
         let openId = this.getCookie('OPEN-ID');
         if (!token) {
           if (!openId) {
-            window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxf9db3d166e257b76&redirect_uri=http://tmmy.guokaizhengxin.com/oAuth&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
+            window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxf9db3d166e257b76&redirect_uri=http://www.nmtmmy.com/oAuth&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
           } else {
             console.log("登录页面进行登录 openId:" + openId)
           }
