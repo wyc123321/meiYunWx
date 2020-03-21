@@ -686,33 +686,33 @@
     height: 60px;
     line-height: 60px;
     border-radius: 3px;
-    border: 2PX solid #ccc;
+    border: 2px solid #ccc;
     background-color: #fff;
-    margin: 20PX auto;
+    margin: 20px auto;
     display: flex !important;
     justify-content: space-between;
-    padding: 0 15PX !important;
+    padding: 0 15px !important;
   }
   .dialog-print .demo5-item-selected {
     background: #ffffff url('../../../static/img/checker.png') no-repeat right bottom;
     /*border-color: #ff4a00 !important;*/
-    border: 2PX solid #ff4a00 !important;
+    border: 2px solid #ff4a00 !important;
   }
   .dialog-print .weui-dialog>p{
-    margin-top: 30PX;
+    margin-top: 30px;
   }
   .dialog-print .weui-dialog .btnList{
     display: flex;
     justify-content: space-between;
     width: 80%;
-    margin: 25PX auto;
+    margin: 25px auto;
     box-sizing: border-box;
   }
   .dialog-print .weui-dialog button{
     width: 40% !important;
-    height: 60PX !important;
-    line-height: 60PX !important;
-    font-size: 22PX!important;
+    height: 60px !important;
+    line-height: 60px !important;
+    font-size: 22px !important;
   }
   .dialog-print .weui-dialog button:first-child{
     color: #000000 !important;
