@@ -32,7 +32,7 @@ axios.interceptors.response.use(function (response) {
         //   path: '/',
         //   query: {redirect: router.currentRoute.fullPath}
         // })'
-        window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxf9db3d166e257b76&redirect_uri=http://tmmy.guokaizhengxin.com/oAuth&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
+        window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxf9db3d166e257b76&redirect_uri=http://www.nmtmmy.com/oAuth&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
     }
   }
   return Promise.reject(error);

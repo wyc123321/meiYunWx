@@ -68,7 +68,7 @@
 
     <!--</div>-->
     <div v-transfer-dom>
-      <alert v-model="showTip" title="恭喜" @on-show="onShow" @on-hide="onHide">提交成功</alert>
+      <alert v-model="showTip" title="恭喜" @on-show="onShow" @on-hide="onHide">打印成功</alert>
     </div>
     <div v-transfer-dom>
       <confirm v-model="show"
@@ -79,6 +79,27 @@
                @on-hide="onHide1">
         <p style="text-align:center;">{{ '确定提交运单吗?' }}</p>
       </confirm>
+    </div>
+    <div v-transfer-dom>
+      <x-dialog v-model="xDialogShow" class="dialog-print">
+        <p>选择打印机</p>
+        <checker
+          v-model="printerId"
+          default-item-class="demo5-item"
+          selected-item-class="demo5-item-selected"
+        >
+          <checker-item v-for="(item,index) in printList" :key="index" :disabled="item.status!=2" :value="item.id">
+            <span> {{item.machineName}}</span>
+            <span v-if="item.status==0">离线</span>
+            <span v-if="item.status==1">缺纸</span>
+            <span v-if="item.status==2">正常</span>
+          </checker-item>
+        </checker>
+        <div class="btnList">
+          <button class="submitBtn" @click="xDialogShow=false">取消</button>
+          <button class="submitBtn" @click="print">确定</button>
+        </div>
+      </x-dialog>
     </div>
   </div>
 </template>
@@ -98,7 +119,9 @@
     Alert,
     TransferDomDirective as TransferDom,
     PopupPicker,
-    Confirm
+    Confirm,
+    XDialog,
+    Checker, CheckerItem
   } from 'vux'
 
   export default {
@@ -156,7 +179,12 @@
         startAddressValue: [],
         realName: '',
         balance: '',
-        show: false
+        show: false,
+        xDialogShow:false,
+        printList:[],
+        printerId: "",
+        printerFlag:false,
+        addWayBillId:''
       }
     },
     components: {
@@ -170,7 +198,9 @@
       Alert,
       PopupPicker,
       plateNumber,
-      Confirm
+      Confirm,
+      XDialog,
+      Checker, CheckerItem
     },
     directives: {
       TransferDom
@@ -178,9 +208,6 @@
     methods: {
       onHide1() {
         console.log('on hide')
-      },
-      onShow() {
-        console.log('on show')
       },
       onCancel() {
         this.show = false;
@@ -191,7 +218,8 @@
         });
         await this.$axios.post(process.env.API_BASE + 'wayBill/add', this.formData).then(response => {
           if (response.status == '200') {
-            this.showTip = true;
+            // this.showTip = true;
+            this.addWayBillId = response.data;
           } else {
             this.$message.error(response.data);
           }
@@ -201,6 +229,7 @@
             this.message = error.response.data;
           }
         });
+        await this.getALlList();
         this.$vux.loading.hide();
       },
       getPlateLicense(data) {
@@ -471,7 +500,47 @@
         if(!storageToken){
           this.$router.replace({path: '/login'});
         }
-      }
+      },
+      async getALlList() {
+        await this.$axios.post(process.env.API_BASE + 'printer/getALlList').then(response => {
+          if (response.status == '200') {
+            this.printList = response.data;
+            this.xDialogShow = true;
+          }
+        }).catch((error) => {
+          if (error.response) {
+            this.showPositionValue = true;
+            this.message = error.response.data;
+          }
+        })
+      },
+      async print() {
+        if(!this.printerId){
+          this.showPositionValue = true;
+          this.message = '请选择打印机';
+          return
+        }
+        let data={
+          id:this.addWayBillId,
+          printerId:this.printerId
+        };
+        this.$vux.loading.show({
+          text: '请稍后...'
+        });
+        await this.$axios.post(process.env.API_BASE + 'wayBill/print',data).then(response => {
+          if (response.status == '200') {
+            this.showTip = true;
+            this.xDialogShow = false;
+            this.printerId = '';
+          }
+        }).catch((error) => {
+          if (error.response) {
+            this.showPositionValue = true;
+            this.message = error.response.data;
+          }
+        });
+        this.$vux.loading.hide();
+      },
     },
     async created() {
       this.$vux.loading.show({
@@ -605,6 +674,43 @@
    color: red !important;
     -webkit-text-fill-color: red !important;
     font-weight: bold !important;
+  }
+  .dialog-print .demo5-item {
+    width: 80%;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    margin: 20px auto;
+    display: flex !important;
+    justify-content: space-between;
+    padding: 0 15px !important;
+  }
+  .dialog-print .demo5-item-selected {
+    background: #ffffff url('../../../static/img/checker.png') no-repeat right bottom;
+    /*border-color: #ff4a00 !important;*/
+    border: 1px solid #ff4a00 !important;
+  }
+  .dialog-print .weui-dialog>p{
+    margin-top: 30px;
+  }
+  .dialog-print .weui-dialog .btnList{
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    margin: 25px auto;
+    box-sizing: border-box;
+  }
+  .dialog-print .weui-dialog button{
+    width: 40% !important;
+    height: 60px !important;
+    line-height: 60px !important;
+    font-size: 22px!important;
+  }
+  .dialog-print .weui-dialog button:first-child{
+    color: #000000 !important;
+    background-color: rgb(248,247,252) !important;
   }
 </style>
 

@@ -368,7 +368,8 @@
   }
  .dialog-print .demo5-item-selected {
     background: #ffffff url('../../../static/img/checker.png') no-repeat right bottom;
-    border-color: #ff4a00;
+    /*border-color: #ff4a00 !important;*/
+    border: 1px solid #ff4a00 !important;
   }
   .dialog-print .weui-dialog>p{
     margin-top: 30px;

@@ -49,7 +49,7 @@ const router = new Router({
       path: '/addWayDetaill',
       name: 'addWayDetaill',
       component: addWayDetaill,
-      meta: {title: '运单列表'}
+      meta: {title: '运单详情'}
     },
     {
       path: '*',
